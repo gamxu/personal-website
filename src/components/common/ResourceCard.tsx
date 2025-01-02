@@ -35,7 +35,7 @@ export default function ResourceCard({
         {/* Image with blur effect */}
         <Image
           className="absolute w-full h-full object-cover blur inset-0 z-20"
-          src={imgPath}
+          src={"/contents/resources-img/" + imgPath}
           width={400}
           height={300}
           alt="work-picture"
@@ -44,7 +44,7 @@ export default function ResourceCard({
         {/* Image on top without blur */}
         <Image
           className="absolute w-full h-full object-contain inset-0 z-30"
-          src={imgPath}
+          src={"/contents/resources-img/" + imgPath}
           width={400}
           height={300}
           alt="work-picture"

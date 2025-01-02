@@ -42,7 +42,7 @@ export default async function ExperienceDetailPage({
       />
       <div className="flex justify-center">
         <Image
-          src={project.imgPath}
+          src={"/contents/works-img/" + project.imgPath}
           alt={project.title}
           width={1000}
           height={1000}

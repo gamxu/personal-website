@@ -40,7 +40,7 @@ export default async function ResourceDetailPage({ params }: Readonly<Props>) {
       />
       <div className="flex justify-center">
         <Image
-          src={project.imgPath}
+          src={"/contents/resources-img/" + project.imgPath}
           alt={project.title}
           width={1000}
           height={1000}

@@ -79,7 +79,7 @@ export const getContentBySlug = async (
 
     const matterResult = matter(fileContents);
     const processedContent = await remark()
-      .use(html)
+      .use(html, { sanitize: false }) // Make sure sanitize is false to allow links
       .process(matterResult.content);
     const content = processedContent.toString();
 
