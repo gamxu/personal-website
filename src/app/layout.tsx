@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="bg-black-bg font-kanit text-white min-h-screen">
+        <div className="bg-black-bg font-inter text-white-primary min-h-screen">
           <Navbar />
           {children}
         </div>

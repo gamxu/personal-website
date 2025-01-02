@@ -19,8 +19,8 @@ export default function Navbar() {
       href: "/",
     },
     {
-      name: "Works",
-      href: "/works",
+      name: "Experiences",
+      href: "/experiences",
     },
     {
       name: "Contacts",
@@ -42,7 +42,7 @@ export default function Navbar() {
         {menuItems.map(({ name, href }, i) => (
           <Link
             key={i}
-            className="hover:text-slate-300 text-sm lg:text-base"
+            className="hover:text-slate-300 text-white-primary text-sm lg:text-base"
             href={href}
           >
             {name}
@@ -51,7 +51,7 @@ export default function Navbar() {
       </div>
       <Link
         className="hidden md:flex justify-center items-center gap-1 bg-orange-normal hover:bg-orange-normal/80 
-        text-sm lg:text-base font-normal text-white py-2 px-4 rounded-[5px] transition-all duration-150 group"
+        text-sm lg:text-base font-normal text-white-pure py-2 px-4 rounded-[5px] transition-all duration-150 group"
         href={"/resources"}
       >
         See My Resources
@@ -62,14 +62,15 @@ export default function Navbar() {
           <SheetTrigger className="h-[40px] w-[40px] rounded-full flex justify-center items-center">
             <RxHamburgerMenu className="text-2xl" />
           </SheetTrigger>
-          <SheetContent className="md:hidden w-[50%]">
+          <SheetContent className="md:hidden w-[50%] bg-[#282C34] border-none [&>button]:text-white-pure">
             <SheetHeader className="mt-3">
               <SheetTitle></SheetTitle>
               <SheetDescription className="flex flex-col gap-3">
                 {menuItems.map(({ name, href }, i) => (
                   <Link
                     key={i}
-                    className="text-black text-left text-base hover:text-orange-normal hover:bg-slate-300/30 py-2 px-4 rounded-lg transition-all duration-150"
+                    className="text-white-primary text-left text-base hover:bg-slate-300/30 
+                    py-2 px-4 rounded-lg transition-all duration-150"
                     href={href}
                   >
                     {name}
@@ -77,7 +78,7 @@ export default function Navbar() {
                 ))}
                 <Link
                   className="flex justify-center items-center gap-1 bg-orange-normal hover:bg-orange-normal/80 mt-5 
-                  text-base font-normal text-white py-2 px-4 rounded-[5px] transition-all duration-150 group"
+                  text-base font-normal text-white-pure py-2 px-4 rounded-[5px] transition-all duration-150 group"
                   href={"/resources"}
                 >
                   See My Resources
