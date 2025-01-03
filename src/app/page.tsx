@@ -149,7 +149,7 @@ const AnimatedAboutSection = () => {
         ref={textSectionRef}
         className="inline-flex flex-col gap-3 md:gap-5 w-[60%] lg:w-[40%] xl:w-[30%] opacity-0 translate-x-full transition-all duration-500 ease-out"
       >
-        <p className="text-xl font-medium text-center md:text-left">Who I Am?</p>
+        <p className="text-xl font-medium text-center md:text-left">Who am I?</p>
         <p className="font-light text-center md:text-left">
           I am a Computer engineering student who is also passionate about
           business and entrepreneurship. I always aimed to utilize my
