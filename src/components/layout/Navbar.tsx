@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight, FaGithub } from "react-icons/fa";
@@ -13,6 +15,7 @@ import {
 import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
   const menuItems = [
     {
       name: "About",
@@ -73,7 +76,7 @@ export default function Navbar() {
       </div>
 
       <div className="lg:hidden">
-        <Sheet>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger className="h-[40px] w-[40px] rounded-full flex justify-center items-center">
             <RxHamburgerMenu className="text-2xl" />
           </SheetTrigger>
@@ -87,6 +90,7 @@ export default function Navbar() {
                     className="text-white-primary text-left text-base hover:bg-slate-300/30 
                     py-2 px-4 rounded-lg transition-all duration-150"
                     href={href}
+                    onClick={() => setIsOpen(false)}
                   >
                     {name}
                   </Link>
@@ -105,6 +109,7 @@ export default function Navbar() {
                     className="flex justify-center items-center gap-1 bg-orange-normal hover:bg-orange-normal/80  
                   text-base font-normal text-white-pure py-2 px-4 rounded-[5px] transition-all duration-150 group"
                     href={"/resources"}
+                    onClick={() => setIsOpen(false)}
                   >
                     See My Resources
                     <FaArrowRight className="text-sm group-hover:translate-x-1 transition-all duration-150" />
