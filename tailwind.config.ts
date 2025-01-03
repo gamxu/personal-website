@@ -11,14 +11,48 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        slideInLeft_1: "slideInLeft 0.4s ease-out",
+        slideInLeft_2: "slideInLeft 0.5s ease-out",
+        slideInLeft_3: "slideInLeft 0.6s ease-out",
+        slideInLeft_4: "slideInLeft 0.7s ease-out",
+        slideInLeft_5: "slideInLeft 0.8s ease-out",
+        slideInRight_1: "slideInRight 0.4s ease-out",
+        slideInRight_2: "slideInRight 0.5s ease-out",
+        slideInRight_3: "slideInRight 0.8s ease-out",
+        fadeIn_1: "fadeIn 1s ease-out",
+        fadeIn_2: "fadeIn 2s ease-out",
+        fadeIn_3: "fadeIn 3s ease-out",
+        fadeIn_4: "fadeIn 4s ease-out",
+        expandWidth: "expandWidth 0.4s ease-in-out forwards",
+      },
+      keyframes: {
+        slideInLeft: {
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        slideInRight: {
+          "0%": { transform: "translateX(100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        expandWidth: {
+          "0%": { transform: "scaleX(0)" },
+          "100%": { transform: "scaleX(1)" },
+        },
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         black: {
           bg: "#202123",
           light: "#272A2F",
+          pure: "#000000",
         },
-        white:{
+        white: {
           primary: "#E8E8E8",
           secondary: "#B0B0B0",
           pure: "#FFFFFF",
