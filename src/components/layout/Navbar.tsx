@@ -13,7 +13,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { RxHamburgerMenu } from "react-icons/rx";
-import ExpandDivider from "../common/dividerExpan";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
