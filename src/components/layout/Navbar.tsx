@@ -13,6 +13,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { RxHamburgerMenu } from "react-icons/rx";
+import ExpandDivider from "../common/dividerExpan";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +83,10 @@ export default function Navbar() {
           </SheetTrigger>
           <SheetContent className="lg:hidden w-[50%] bg-[#282C34] border-none [&>button]:text-white-pure">
             <SheetHeader className="mt-3">
-              <SheetTitle></SheetTitle>
+              <SheetTitle className="text-base text-white-secondary">
+                Contents
+                <div className="w-full border border-slate-300/30 mt-2 mb-3"></div>
+              </SheetTitle>
               <SheetDescription className="flex flex-col gap-3">
                 {menuItems.map(({ name, href }, i) => (
                   <Link
