@@ -15,7 +15,7 @@ export default function DocumentBtn({
     <button
       onClick={() => window.open(`/documents/${fileName}`)}
       className="bg-orange-normal hover:bg-orange-normal/80 inline-flex justify-center items-center text-sm 
-    font-normal text-white-pure py-3 px-5 rounded-[3px] self-start transition-all duration-150"
+    font-medium text-white-pure py-3 px-5 rounded-[3px] self-start transition-all duration-150"
     >
       {label}
     </button>
