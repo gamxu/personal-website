@@ -10,7 +10,7 @@ import { IoLogoLinkedin } from "react-icons/io";
 
 export default function Home() {
   return (
-    <div className="text-white pb-20">
+    <div className="text-white pb-20 overflow-hidden">
       <div className="px-4 md:px-10 lg:px-20">
         <div className="flex flex-row justify-center items-start md:items-center xl:items-start md:gap-10 w-full px-0 lg:px-20 mt-10">
           <div className="h-full mt-5 md:mt-16">
