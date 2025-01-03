@@ -3,7 +3,14 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import React from "react";
+import { FieldValues, useForm } from "react-hook-form";
+
+interface IFormInput {
+  name: string;
+  email: string;
+  message: string;
+}
 
 export default function ContactPage() {
   const myEmail = "wuttipat.gamxu@gmail.com";
@@ -11,44 +18,28 @@ export default function ContactPage() {
   const myAddress =
     "Suthep Rd, Tambon Su Thep, Mueang Chiang Mai District, Chang Wat Chiang Mai 50200";
 
-  const [value, setValue] = useState("");
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [status, setStatus] = useState("");
+  const { register, handleSubmit } = useForm<IFormInput>();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    setValue(textarea.value);
+  const onSubmit = (data: FieldValues) => {
+    // Extract form data
+    const { name, email, message } = data;
 
-    // Auto-resize textarea
-    textarea.style.height = "auto";
-    textarea.style.height = `${textarea.scrollHeight}px`;
-  };
+    // Create the mailto link dynamically based on form data
+    const subject = `From Personal Website by ${name}`;
+    const body =
+      `Hello,\n\n` +
+      `My name is ${name}, and I am reaching out to you via your website's contact form. Below are the details of my inquiry:\n\n` +
+      `${message}\n\n` +
+      `Thank you for your time, and I look forward to your response.\n\n` +
+      `You can reach me at **${email}**\n\n` +
+      `Best regards,\n${name}`;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus(""); // Clear previous status message
+    const mailtoLink = `mailto:${myEmail}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
 
-    // Send form data to the backend (e.g., an API endpoint)
-    const response = await fetch("/api/send-email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      setStatus("Your message has been sent successfully!");
-      setFormData({ name: "", email: "", message: "" }); // Reset form
-    } else {
-      setStatus(data.error || "Something went wrong!");
-    }
+    // Redirect to the mailto link (opens email client)
+    window.location.href = mailtoLink;
   };
 
   return (
@@ -58,7 +49,8 @@ export default function ContactPage() {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-2">Get in Touch</h2>
         <p>
-          If you have any questions or inquiries, feel free to reach out to me! I would love to hear anything from you.
+          If you have any questions or inquiries, feel free to reach out to me!
+          I would love to hear anything from you.
         </p>
       </div>
 
@@ -98,10 +90,11 @@ export default function ContactPage() {
 
       <div>
         <h3 className="text-xl font-semibold mb-2">Contact Form</h3>
-        <form onSubmit={handleSubmit} method="POST">
+        <form onSubmit={handleSubmit(onSubmit)} method="POST">
           <div className="mb-4">
             <Label htmlFor="name">Your Name</Label>
             <Input
+              {...register("name", { required: true })}
               id="name"
               name="name"
               type="text"
@@ -115,11 +108,11 @@ export default function ContactPage() {
           <div className="mb-4">
             <Label htmlFor="email">Your Email</Label>
             <Input
+              {...register("email", { required: true })}
               id="email"
               name="email"
               type="email"
               placeholder="example@gmail.com"
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md 
               bg-white-primary text-black-pure text-base"
             />
@@ -128,11 +121,10 @@ export default function ContactPage() {
           <div className="mb-4">
             <Label htmlFor="message">Your Message</Label>
             <Textarea
+              {...register("message", { required: true })}
               id="message"
               name="message"
               placeholder="Type your message here..."
-              value={value}
-              onChange={handleInputChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md 
               bg-white-primary text-black-pure text-base"
             />
@@ -146,7 +138,6 @@ export default function ContactPage() {
             </button>
           </div>
         </form>
-        {status && <p className="mt-4 text-center text-lg">{status}</p>}
       </div>
     </div>
   );
