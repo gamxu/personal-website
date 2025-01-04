@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { formatInternalUrl } from "@/lib/utils";
 import React, { useState } from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -117,7 +118,8 @@ export default function FormReviewPage() {
         technicalSkills: data.technicalSkills,
       }).toString();
 
-      const apiUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
+      const apiUrl = formatInternalUrl("/api/review/send");
+      console.log(apiUrl);
       const response = await fetch(apiUrl ?? "", {
         method: "POST",
         headers: {
