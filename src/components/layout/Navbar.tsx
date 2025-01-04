@@ -29,24 +29,28 @@ export default function Navbar() {
       name: "Contacts",
       href: "/contacts",
     },
+    {
+      name: "Give Feedback",
+      href: "/form-review",
+    },
   ];
   return (
     <div className="flex justify-between items-center px-4 md:px-10 lg:px-20 font-kanit text-white py-5">
-      <div className="flex justify-between items-center gap-10 xl:gap-20">
+      <div className="flex justify-between items-center gap-5 xl:gap-14">
         <Link href={"/"} className="shrink-0">
           <Image
             src="/barcode-icon.svg"
-            className="h-[30px] lg:h-[40px]"
+            className="h-[30px] xl:h-[40px]"
             width={100}
             height={100}
             alt="logo"
           />
         </Link>
-        <div className="hidden lg:flex gap-16 xl:gap-24">
+        <div className="hidden lg:flex gap-10 xl:gap-14">
           {menuItems.map(({ name, href }, i) => (
             <Link
               key={i}
-              className="hover:text-slate-300 text-white-primary text-sm lg:text-base"
+              className="hover:text-slate-300 text-white-primary text-sm xl:text-base py-2"
               href={href}
             >
               {name}
@@ -62,8 +66,8 @@ export default function Navbar() {
           text-sm xl:text-base rounded-[5px] py-2 px-4 max-h-[36px] xl:max-h-[40px] font-medium hover:bg-white-pure/80 
           transition-all duration-150"
         >
-          <FaGithub className="text-lg xl:text-2xl" />
-          GitHub
+          <FaGithub className="text-2xl" />
+          <span className="hidden xl:inline">GitHub</span>
         </Link>
         <Link
           className="hidden lg:flex justify-center items-center gap-1 bg-orange-normal hover:bg-orange-normal/80 
