@@ -1,0 +1,32 @@
+const sheets = SpreadsheetApp.openByUrl("Put_Sheet_Url_Here");
+
+const sheet = sheets.getSheetByName("Review");
+
+function doPost(e) {
+  try{  
+    let data = e.parameter;
+
+    if (!sheet) {
+      return ContentService.createTextOutput("Error: Sheet not found");
+    }
+
+    sheet.appendRow([
+      new Date(),
+      data.name,
+      data.message,
+      data.communication,
+      data.professionalism,
+      data.qualityOfWork,
+      data.timeliness,
+      data.problemSolving,
+      data.creativity,
+      data.responsiveness,
+      data.reliability,
+      data.technicalSkills,
+    ])
+
+    return ContentService.createTextOutput(JSON.stringify({ result: "success" }));
+  }catch(error) {
+    return ContentService.createTextOutput("Error: " + error.toString());
+  }
+}

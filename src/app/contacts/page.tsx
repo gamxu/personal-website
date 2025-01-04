@@ -1,10 +1,12 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import React from "react";
+import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 interface IFormInput {
   name: string;
@@ -19,8 +21,11 @@ export default function ContactPage() {
     "Suthep Rd, Tambon Su Thep, Mueang Chiang Mai District, Chang Wat Chiang Mai 50200";
 
   const { register, handleSubmit } = useForm<IFormInput>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = (data: FieldValues) => {
+    setIsSubmitting(true);
+
     // Extract form data
     const { name, email, message } = data;
 
@@ -38,52 +43,54 @@ export default function ContactPage() {
       subject
     )}&body=${encodeURIComponent(body)}`;
 
-    // Redirect to the mailto link (opens email client)
+    toast.loading("Redirecting...");
+
+    // Redirect to the mailto link
     window.location.href = mailtoLink;
+
+    // Reset form after 5 seconds
+    setTimeout(() => {
+      setIsSubmitting(false); // Optional: Reset state after a timeout
+    }, 5000);
   };
 
   return (
     <div className="max-w-4xl mx-auto pt-[25px] pb-[100px] px-5">
-      <h1 className="text-3xl font-semibold text-center mb-6">Contact Me!</h1>
-
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Get in Touch</h2>
-        <p>
-          If you have any questions or inquiries, feel free to reach out to me!
-          I would love to hear anything from you.
-        </p>
-      </div>
-
+      <h1 className="text-3xl font-semibold text-center mb-4">Contact Me!</h1>
+      <p className="mb-6 text-center">
+        If you have any questions or inquiries, feel free to reach out to me! I
+        would love to hear anything from you.
+      </p>
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-2">Contact Information</h3>
         <ul>
-          <li className="mb-2 grid grid-cols-1 sm:grid-cols-8 gap-2 items-center">
+          <li className="mb-2 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
             <span className="font-semibold col-span-1 sm:col-span-2">
               {/* Title Column */}Email:
             </span>
             <a
               href={"mailto:" + myEmail}
-              className="text-blue-500 col-span-1 sm:col-span-6"
+              className="text-blue-500 col-span-1 sm:col-span-10"
             >
               {myEmail}
             </a>
           </li>
-          <li className="mb-2 grid grid-cols-1 sm:grid-cols-8 gap-2 items-center">
+          <li className="mb-2 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
             <span className="font-semibold col-span-1 sm:col-span-2">
               {/* Title Column */}Phone:
             </span>
             <a
               href={"tel:" + myPhone}
-              className="text-blue-500 col-span-1 sm:col-span-6"
+              className="text-blue-500 col-span-1 sm:col-span-10"
             >
               {myPhone}
             </a>
           </li>
-          <li className="mb-2 grid grid-cols-1 sm:grid-cols-8 gap-2 items-center">
+          <li className="mb-2 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
             <span className="font-semibold col-span-1 sm:col-span-2">
               {/* Title Column */}Address:
             </span>
-            <p className="col-span-1 sm:col-span-6">{myAddress}</p>
+            <p className="col-span-1 sm:col-span-10">{myAddress}</p>
           </li>
         </ul>
       </div>
@@ -99,7 +106,6 @@ export default function ContactPage() {
               name="name"
               type="text"
               placeholder="John Doe"
-              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md 
               bg-white-primary text-black-pure text-base"
             />
@@ -130,12 +136,13 @@ export default function ContactPage() {
             />
           </div>
           <div className="flex justify-end">
-            <button
+            <Button
               type="submit"
+              disabled={isSubmitting} // Disable the button during submission
               className="bg-orange-normal hover:bg-orange-normal/80 text-white px-6 py-2 rounded-md mt-4"
             >
               Send Message
-            </button>
+            </Button>
           </div>
         </form>
       </div>

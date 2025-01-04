@@ -78,7 +78,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="hidden sm:block w-[40%] animate-slideInRight_2">
+          <div className="hidden sm:block w-[40%] max-w-[500px] animate-slideInRight_2">
             <Image
               src="/human-pro.svg"
               className="max-h-[500px]"

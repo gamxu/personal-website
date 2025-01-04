@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "gamxu.me", // You can use metadata for title
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="bg-black-bg font-inter text-white-primary min-h-screen">
+          <Toaster />
           <Navbar />
           {children}
         </div>
