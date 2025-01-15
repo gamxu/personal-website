@@ -4,6 +4,7 @@ import { StarRating } from "@/components/common/starRating";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Spinner from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { formatInternalUrl } from "@/lib/utils";
 import React, { useState } from "react";
@@ -231,9 +232,9 @@ export default function FormReviewPage() {
             <Button
               type="submit"
               disabled={isSubmitting} // Disable the button during submission
-              className="bg-orange-normal hover:bg-orange-normal/80 text-white px-6 py-2 rounded-md"
+              className="bg-orange-normal hover:bg-orange-normal/80 text-white w-[150px] py-2 rounded-md"
             >
-              Send Message
+              {isSubmitting ? <Spinner className="w-5 h-5 border-[3px]"/> : "Send Message"}
             </Button>
           </div>
         </form>

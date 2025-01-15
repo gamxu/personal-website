@@ -141,7 +141,7 @@ export default function ContactPage() {
               disabled={isSubmitting} // Disable the button during submission
               className="bg-orange-normal hover:bg-orange-normal/80 text-white px-6 py-2 rounded-md mt-4"
             >
-              Send Message
+              Send To Mail
             </Button>
           </div>
         </form>
