@@ -234,7 +234,7 @@ export default function FormReviewPage() {
               disabled={isSubmitting} // Disable the button during submission
               className="bg-orange-normal hover:bg-orange-normal/80 text-white w-[150px] py-2 rounded-md"
             >
-              {isSubmitting ? <Spinner className="w-5 h-5 border-[3px]"/> : "Send Message"}
+              {isSubmitting ? <Spinner className="h-6 w-6 border-[3px]"/> : "Send Message"}
             </Button>
           </div>
         </form>
