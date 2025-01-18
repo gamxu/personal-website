@@ -88,7 +88,7 @@ if inputShowZones
 
 // Clean up old zones
 if bar_index > 500
-    while array.size(orderBlockZones) > inputMaxFVGs
+    while array.size(orderBlockZones) > inputMaxZones
         box.delete(array.shift(orderBlockZones))
     while array.size(fairValueGaps) > inputMaxFVGs
         box.delete(array.shift(fairValueGaps))
