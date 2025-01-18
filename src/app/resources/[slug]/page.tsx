@@ -35,7 +35,8 @@ export default async function ResourceDetailPage({ params }: Readonly<Props>) {
 
       <div
         className="prose prose-p:text-white-primary prose-p:text-base prose-p:font-light prose-a:font-light prose-a:text-blue-400
-        prose-p:leading-loose max-w-none prose-ul:font-light prose-ul:text-white-primary"
+        prose-p:leading-loose max-w-none prose-ul:font-light prose-ul:text-white-primary prose-li:text-white-primary prose-h2:text-white-primary 
+        prose-h3:text-white-primary"
         dangerouslySetInnerHTML={{ __html: project.content }}
       />
       <div className="flex justify-center">

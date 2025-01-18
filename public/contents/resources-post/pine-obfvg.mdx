@@ -1,0 +1,96 @@
+---
+title: "OB+FVG Pine Script indicator"
+description: "Draw Order Block and FVG zone use in forex pair trading"
+imgPath: "pine-obfvg.png"
+startDate: "Jan 2025"
+category: ""
+---
+
+### TradingView Pine Script Code 
+This is a TradingView Pine Script codes which are not published in TradingView.
+
+### How to add the Pine Script Code to TradingView Chart?
+1. Open TradingView chart.
+2. Click "Pine Editor" at the bottom.
+3. Copy indicator code and Paste it in Pine Editor.
+4. Click "Save" in Pine Editor.
+5. Click "Add to Chart" in Pine Editor.
+6. Your indicator will be displayed on the chart.
+
+### Purpose of this indicator
+This indicator is use along with my personal trading setup which include Order Block, Fair Value Gap, and Liquidity. In order for you to benefit the best out if this indicator, you will require the basic knowledge and experience of the 3 techniques previously listed.
+
+### Disclaimer
+The information and publications are not intended to be, and do not constitute, financial, investment, trading, or any other form of advice or recommendations supplied or endorsed by the publisher or the creators of this script. Users are advised to exercise their own judgment and seek professional advice before making any financial decisions.
+
+### FeedBack
+If you find this indicator improves your trading or helps you make money, consider giving me a review in "Give FeedBack" Tab!.
+
+```bash
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Did4677
+
+//@version=6
+indicator("Order Block+ FVG Detection", overlay=true)
+
+// Inputs
+inputImbalanceMultiplierMin = input.float(2.0, title="Imbalance Multiplier Min")
+inputShowZones = input.bool(true, title="Show Order Block Zones")
+inputShowFVGs = input.bool(true, title="Show Fair Value Gaps")
+inputMaxZones = input.int(10, title="Amount of Order Block Zones can be shown")
+inputMaxFVGs = input.int(10, title="Amount of Fair Value Gaps can be shown")
+
+
+isCurrentBull = close > open
+isCurrentBear = close < open
+
+totalHLlength = high[1] - low[1]
+topWick = math.abs(high[1] - math.max(open[1], close[1])) 
+lowwick = math.abs(math.min(open[1], close[1]) - low[1])
+totalWickLength = topWick + lowwick
+
+// Functions
+isImbalanceCandle(leftBody, rightBody) => 
+    rightBody >= leftBody * inputImbalanceMultiplierMin and totalWickLength <= 0.3 * totalHLlength
+
+// Calculating candle sizes
+leftBody = math.abs(high[2] - low[2]) // Previous candle body size
+rightBody = math.abs(close[1] - open[1])     // Current candle body size
+
+// Identify imbalance and order block
+isBullImbalance = isImbalanceCandle(leftBody, rightBody) and (close[1] > open[1])
+isBearImbalance = isImbalanceCandle(leftBody, rightBody) and (close[1] < open[1])
+
+var orderBlockZones = array.new_box(0)
+var fairValueGaps = array.new_box(0)
+
+// Identify and draw Fair Value Gap (FVG)
+// bull fvg
+if inputShowFVGs
+    if (low > high[2]) and isBullImbalance and isCurrentBull
+        box fvg = box.new(bar_index[2], high[2], bar_index[0], low, border_color=color.new(color.gray, 0), bgcolor=color.new(color.gray, 90), extend=extend.right)
+        array.push(fairValueGaps, fvg)
+    //bear fvg
+    else if (high < low[2]) and isBearImbalance and isCurrentBear
+        box fvg = box.new(bar_index[2], low[2], bar_index[0], high, border_color=color.new(color.gray, 0), bgcolor=color.new(color.gray, 90), extend=extend.right)
+        array.push(fairValueGaps, fvg)
+
+// Highlight order block zone
+if inputShowZones
+    if isBullImbalance and isCurrentBull
+        colorBox = color.new(color.blue, 80)
+        box zone = box.new(bar_index[2], high[2], bar_index[2] + 1, low[2], border_color=color.new(color.blue, 0), bgcolor=colorBox, extend = extend.right)
+        array.push(orderBlockZones, zone)
+    else if isBearImbalance and isCurrentBear
+        colorBox = color.new(color.red, 80)
+        box zone = box.new(bar_index[2], high[2], bar_index[2] + 1, low[2], border_color=color.new(color.red, 0), bgcolor=colorBox, extend = extend.right)
+        array.push(orderBlockZones, zone)
+
+// Clean up old zones
+if bar_index > 500
+    while array.size(orderBlockZones) > inputMaxFVGs
+        box.delete(array.shift(orderBlockZones))
+    while array.size(fairValueGaps) > inputMaxFVGs
+        box.delete(array.shift(fairValueGaps))
+
+```
