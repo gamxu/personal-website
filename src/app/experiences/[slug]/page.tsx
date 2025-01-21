@@ -1,10 +1,10 @@
 import {
   ContentType,
-  formatDateRange,
   getAllContent,
   getContentBySlug,
 } from "@/lib/markdownProcess";
 import { Props } from "@/lib/types";
+import { formatDateRange } from "@/lib/utils";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -37,7 +37,7 @@ export default async function ExperienceDetailPage({
 
       <div
         className="prose prose-p:text-white-primary prose-p:text-base prose-p:font-light prose-a:font-light prose-a:text-blue-400
-        prose-p:leading-loose max-w-none prose-ul:font-light prose-ul:text-white-primary"
+        prose-p:leading-loose max-w-none prose-ul:font-light prose-ul:text-white-primary prose-"
         dangerouslySetInnerHTML={{ __html: project.content }}
       />
       <div className="flex justify-center">

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { CardProps } from "@/lib/types";
-import { formatDateRange } from "@/lib/markdownProcess";
+import { formatDateRange } from "@/lib/utils";
 
 interface ResourceCardProps extends CardProps {
   description: string;

@@ -12,3 +12,21 @@ export function formatInternalUrl(url: string) {
   const apiUrl = new URL(url, baseUrl).toString();
   return apiUrl;
 }
+
+// Utility function to format date range
+export const formatDateRange = (
+  startDate: string,
+  endDate?: string
+): string => {
+  const start = new Date(startDate);
+  const end = endDate ? new Date(endDate) : "";
+
+  const formatDate = (date: Date): string => {
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+    });
+  };
+
+  return end ? `${formatDate(start)} - ${formatDate(end)}` : formatDate(start);
+};

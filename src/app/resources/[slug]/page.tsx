@@ -1,10 +1,10 @@
 import {
   ContentType,
-  formatDateRange,
   getAllContent,
   getContentBySlug,
 } from "@/lib/markdownProcess";
 import { Props } from "@/lib/types";
+import { formatDateRange } from "@/lib/utils";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
