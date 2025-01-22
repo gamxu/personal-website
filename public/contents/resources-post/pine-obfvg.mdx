@@ -40,6 +40,26 @@ inputShowFVGs = input.bool(true, title="Show Fair Value Gaps")
 inputMaxZones = input.int(10, title="Amount of Order Block Zones can be shown")
 inputMaxFVGs = input.int(10, title="Amount of Fair Value Gaps can be shown")
 
+// Structure to store order block information
+type OrderBlock
+    box     id
+    float   high
+    float   low
+    bool    isBull
+    int     startIndex
+    bool    isActive
+
+// Structure to store FVG information
+type FVG
+    box     id
+    float   high
+    float   low
+    bool    isBull
+    int     startIndex
+    bool    isActive
+
+var orderBlocks = array.new<OrderBlock>()
+var fvgs = array.new<FVG>()
 
 isCurrentBull = close > open
 isCurrentBear = close < open
@@ -49,48 +69,98 @@ topWick = math.abs(high[1] - math.max(open[1], close[1]))
 lowwick = math.abs(math.min(open[1], close[1]) - low[1])
 totalWickLength = topWick + lowwick
 
-// Functions
-isImbalanceCandle(leftBody, rightBody) => 
-    rightBody >= leftBody * inputImbalanceMultiplierMin and totalWickLength <= 0.3 * totalHLlength
+// imbalance need to be a strong candle and is 2-3 time bigger than the balance base candle
+isImbalanceCandle(leftBody, rightBody, currentBody) => 
+    rightBody + currentBody >= leftBody * inputImbalanceMultiplierMin and totalWickLength <= 0.3 * totalHLlength
+
+// Check if price retests an order block
+isRetested(ob) =>
+    if ob.isBull
+        low <= ob.high and high >= ob.high
+    else
+        high >= ob.low and low <= ob.low
+
+// Check if price retests a FVG
+isRetestedFVG(fvg) =>
+    // Calculate the midpoint of the gap
+    gapMidpoint = if fvg.isBull
+        fvg.low + (fvg.high - fvg.low) * 0.5  // For bullish FVG
+    else
+        fvg.high - (fvg.high - fvg.low) * 0.5  // For bearish FVG
+    
+    // Check if price has reached 50% of the gap
+    if fvg.isBull
+        low <= gapMidpoint  // Price needs to reach halfway into bullish gap
+    else
+        high >= gapMidpoint  // Price needs to reach halfway into bearish gap
 
 // Calculating candle sizes
-leftBody = math.abs(high[2] - low[2]) // Previous candle body size
-rightBody = math.abs(close[1] - open[1])     // Current candle body size
+leftBody = math.abs(high[2] - low[2])
+rightBody = math.abs(close[1] - open[1])
+currentBody = math.abs(close - open)
 
 // Identify imbalance and order block
-isBullImbalance = isImbalanceCandle(leftBody, rightBody) and (close[1] > open[1])
-isBearImbalance = isImbalanceCandle(leftBody, rightBody) and (close[1] < open[1])
+isBullImbalance = isImbalanceCandle(leftBody, rightBody, currentBody) and (close[1] > open[1])
+isBearImbalance = isImbalanceCandle(leftBody, rightBody, currentBody) and (close[1] < open[1])
 
-var orderBlockZones = array.new_box(0)
-var fairValueGaps = array.new_box(0)
-
-// Identify and draw Fair Value Gap (FVG)
-// bull fvg
+// Handle Fair Value Gaps
 if inputShowFVGs
     if (low > high[2]) and isBullImbalance and isCurrentBull
-        box fvg = box.new(bar_index[2], high[2], bar_index[0], low, border_color=color.new(color.gray, 0), bgcolor=color.new(color.gray, 90), extend=extend.right)
-        array.push(fairValueGaps, fvg)
-    //bear fvg
+        box fvgBox = box.new(bar_index[2], high[2], bar_index + 100, low, 
+             border_color=color.new(color.gray, 100), 
+             bgcolor=color.new(color.gray, 90))
+        fvg = FVG.new(fvgBox, high[2], low, true, bar_index[2], true)
+        array.push(fvgs, fvg)
     else if (high < low[2]) and isBearImbalance and isCurrentBear
-        box fvg = box.new(bar_index[2], low[2], bar_index[0], high, border_color=color.new(color.gray, 0), bgcolor=color.new(color.gray, 90), extend=extend.right)
-        array.push(fairValueGaps, fvg)
+        box fvgBox = box.new(bar_index[2], low[2], bar_index + 100, high, 
+             border_color=color.new(color.gray, 100), 
+             bgcolor=color.new(color.gray, 90))
+        fvg = FVG.new(fvgBox, low[2], high, false, bar_index[2], true)
+        array.push(fvgs, fvg)
 
-// Highlight order block zone
+// Create new order blocks
 if inputShowZones
     if isBullImbalance and isCurrentBull
         colorBox = color.new(color.blue, 80)
-        box zone = box.new(bar_index[2], high[2], bar_index[2] + 1, low[2], border_color=color.new(color.blue, 0), bgcolor=colorBox, extend = extend.right)
-        array.push(orderBlockZones, zone)
+        box zone = box.new(bar_index[2], high[2], bar_index + 100, low[2], 
+             border_color=color.new(color.blue, 0), 
+             bgcolor=colorBox)
+        ob = OrderBlock.new(zone, high[2], low[2], true, bar_index[2], true)
+        array.push(orderBlocks, ob)
     else if isBearImbalance and isCurrentBear
         colorBox = color.new(color.red, 80)
-        box zone = box.new(bar_index[2], high[2], bar_index[2] + 1, low[2], border_color=color.new(color.red, 0), bgcolor=colorBox, extend = extend.right)
-        array.push(orderBlockZones, zone)
+        box zone = box.new(bar_index[2], high[2], bar_index + 100, low[2], 
+             border_color=color.new(color.red, 0), 
+             bgcolor=colorBox)
+        ob = OrderBlock.new(zone, high[2], low[2], false, bar_index[2], true)
+        array.push(orderBlocks, ob)
+
+// Check for retests and update order blocks
+if array.size(orderBlocks) > 0
+    for i = array.size(orderBlocks) - 1 to 0
+        ob = array.get(orderBlocks, i)
+        if ob.isActive and isRetested(ob)
+            box.set_right(ob.id, bar_index)
+            ob.isActive := false
+            array.set(orderBlocks, i, ob)
+
+// Check for retests and update FVGs
+if array.size(fvgs) > 0
+    for i = array.size(fvgs) - 1 to 0
+        fvg = array.get(fvgs, i)
+        // Only check for retest if we're past candles that create it
+        if fvg.isActive and (bar_index > fvg.startIndex + 3)
+            if isRetestedFVG(fvg)
+                box.set_right(fvg.id, bar_index)
+                fvg.isActive := false
+                array.set(fvgs, i, fvg)
 
 // Clean up old zones
 if bar_index > 500
-    while array.size(orderBlockZones) > inputMaxZones
-        box.delete(array.shift(orderBlockZones))
-    while array.size(fairValueGaps) > inputMaxFVGs
-        box.delete(array.shift(fairValueGaps))
-
+    while array.size(orderBlocks) > inputMaxZones
+        firstOb = array.shift(orderBlocks)
+        box.delete(firstOb.id)
+    while array.size(fvgs) > inputMaxFVGs
+        firstFvg = array.shift(fvgs)
+        box.delete(firstFvg.id)
 ```
