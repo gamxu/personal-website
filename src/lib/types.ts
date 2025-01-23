@@ -4,7 +4,7 @@ export type CardProps = {
   imgPath: string;
   startDate: string;
   endDate?: string;
-  category: "work" | "certificate";
+  category: string;
 };
 
 export type Props = {

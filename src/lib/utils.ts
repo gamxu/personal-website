@@ -24,7 +24,7 @@ export const formatDateRange = (
   const formatDate = (date: Date): string => {
     return date.toLocaleDateString("en-US", {
       year: "numeric",
-      month: "long",
+      month: "short",
     });
   };
 
