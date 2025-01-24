@@ -1,6 +1,6 @@
 "use client";
 
-import ExpandDivider from "@/components/common/dividerExpan";
+import ExpandDivider from "@/components/common/dividerExpand";
 import WorkCard from "@/components/common/WorkCard";
 import {
   Select,
@@ -56,7 +56,11 @@ export default function ExperienceListingPage() {
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
               {categories.map((category) => (
-                <SelectItem key={category} value={category} className="capitalize">
+                <SelectItem
+                  key={category}
+                  value={category}
+                  className="capitalize"
+                >
                   {category}
                 </SelectItem>
               ))}
